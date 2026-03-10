@@ -1188,6 +1188,112 @@
             justify-content: center;
             flex-wrap: wrap;
         }
+        /* Форма заявки */
+        .contact-form {
+            max-width: 500px;
+            margin: 0 auto 40px;
+            text-align: left;
+        }
+        .contact-form .form-row {
+            margin-bottom: 16px;
+        }
+        .contact-form label {
+            display: block;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 6px;
+            font-weight: 500;
+        }
+        .contact-form input,
+        .contact-form select,
+        .contact-form textarea {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(212,175,55,0.2);
+            border-radius: 10px;
+            color: var(--text-primary);
+            font-family: var(--font-body);
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color var(--transition);
+        }
+        .contact-form input:focus,
+        .contact-form select:focus,
+        .contact-form textarea:focus {
+            border-color: var(--gold);
+        }
+        .contact-form input::placeholder,
+        .contact-form textarea::placeholder {
+            color: var(--text-muted);
+        }
+        .contact-form select {
+            appearance: none;
+            cursor: pointer;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23a8a4b8' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+        }
+        .contact-form select option {
+            background: #16162a;
+            color: var(--text-primary);
+        }
+        .contact-form textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+        .contact-form .btn-submit {
+            width: 100%;
+            padding: 14px;
+            background: var(--gradient-gold);
+            color: var(--bg-dark);
+            border: none;
+            border-radius: 10px;
+            font-family: var(--font-body);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform var(--transition), box-shadow var(--transition);
+        }
+        .contact-form .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-gold);
+        }
+        .contact-form .btn-submit:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .form-success {
+            display: none;
+            text-align: center;
+            padding: 24px;
+            background: rgba(76,175,80,0.1);
+            border: 1px solid rgba(76,175,80,0.3);
+            border-radius: 12px;
+            color: #66bb6a;
+            font-size: 1rem;
+            margin-bottom: 40px;
+        }
+        .form-success.show {
+            display: block;
+        }
+        .form-divider {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 32px;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+        .form-divider::before,
+        .form-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: rgba(255,255,255,0.08);
+        }
+
         .btn-tg {
             background: #0088cc;
             color: #fff;
@@ -1783,6 +1889,40 @@
         <h2 class="cta-title reveal">Готов создать ваш <span class="gold-text">идеальный праздник</span></h2>
         <p class="cta-subtitle reveal">Позвоните или напишите — обсудим детали вашего мероприятия</p>
         <a href="tel:+79670013272" class="cta-phone reveal">+7 (967) 001-32-72</a>
+
+        <!-- Форма заявки -->
+        <form class="contact-form reveal" id="contactForm" onsubmit="return submitForm(event)">
+            <div class="form-row">
+                <label for="cf-name">Ваше имя</label>
+                <input type="text" id="cf-name" name="name" placeholder="Как к вам обращаться?" required>
+            </div>
+            <div class="form-row">
+                <label for="cf-phone">Телефон</label>
+                <input type="tel" id="cf-phone" name="phone" placeholder="+7 (___) ___-__-__" required>
+            </div>
+            <div class="form-row">
+                <label for="cf-event">Тип мероприятия</label>
+                <select id="cf-event" name="event">
+                    <option value="">Выберите тип...</option>
+                    <option value="Свадьба">Свадьба</option>
+                    <option value="Корпоратив">Корпоратив</option>
+                    <option value="Юбилей">Юбилей</option>
+                    <option value="Выпускной">Выпускной</option>
+                    <option value="Другое">Другое мероприятие</option>
+                </select>
+            </div>
+            <div class="form-row">
+                <label for="cf-message">Комментарий <span style="color:var(--text-muted);font-weight:400;">(необязательно)</span></label>
+                <textarea id="cf-message" name="message" placeholder="Дата, количество гостей, пожелания..."></textarea>
+            </div>
+            <button type="submit" class="btn-submit" id="cf-submit">Оставить заявку</button>
+        </form>
+        <div class="form-success" id="formSuccess">
+            Спасибо! Ваша заявка отправлена.<br>Игорь свяжется с вами в ближайшее время.
+        </div>
+
+        <div class="form-divider reveal">или напишите напрямую</div>
+
         <div class="cta-buttons reveal">
             <!-- ЗАМЕНИТЕ: вставьте реальный Telegram username вместо imshowman -->
             <a href="https://t.me/imshowman" target="_blank" rel="noopener" class="btn btn-tg">
@@ -2129,6 +2269,72 @@
         }
     }
 })();
+</script>
+
+<!-- Форма заявки: отправка в Telegram -->
+<script>
+// НАСТРОЙКИ: замените на реальные значения после создания бота
+var TG_BOT_TOKEN = 'YOUR_BOT_TOKEN';  // Получить у @BotFather
+var TG_CHAT_ID   = 'YOUR_CHAT_ID';    // ID чата/группы для заявок
+
+function submitForm(e) {
+    e.preventDefault();
+    var btn = document.getElementById('cf-submit');
+    var name = document.getElementById('cf-name').value.trim();
+    var phone = document.getElementById('cf-phone').value.trim();
+    var eventType = document.getElementById('cf-event').value;
+    var message = document.getElementById('cf-message').value.trim();
+
+    if (!name || !phone) return false;
+
+    btn.disabled = true;
+    btn.textContent = 'Отправка...';
+
+    var text = '📋 *Новая заявка с сайта*\n\n'
+        + '👤 *Имя:* ' + name + '\n'
+        + '📱 *Телефон:* ' + phone + '\n'
+        + (eventType ? '🎉 *Мероприятие:* ' + eventType + '\n' : '')
+        + (message ? '💬 *Комментарий:* ' + message + '\n' : '')
+        + '\n🕐 ' + new Date().toLocaleString('ru-RU');
+
+    // Если токен не настроен — просто показываем успех (для тестирования)
+    if (TG_BOT_TOKEN === 'YOUR_BOT_TOKEN') {
+        showSuccess();
+        return false;
+    }
+
+    fetch('https://api.telegram.org/bot' + TG_BOT_TOKEN + '/sendMessage', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            chat_id: TG_CHAT_ID,
+            text: text,
+            parse_mode: 'Markdown'
+        })
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+        if (data.ok) {
+            showSuccess();
+        } else {
+            alert('Ошибка отправки. Позвоните нам: +7 (967) 001-32-72');
+            btn.disabled = false;
+            btn.textContent = 'Оставить заявку';
+        }
+    })
+    .catch(function() {
+        alert('Ошибка сети. Позвоните нам: +7 (967) 001-32-72');
+        btn.disabled = false;
+        btn.textContent = 'Оставить заявку';
+    });
+
+    return false;
+}
+
+function showSuccess() {
+    document.getElementById('contactForm').style.display = 'none';
+    document.getElementById('formSuccess').classList.add('show');
+}
 </script>
 
 </body>
